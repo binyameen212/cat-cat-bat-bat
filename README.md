@@ -1,6 +1,30 @@
 # Cat Cat Bat Bat
 
-A mobile-first multiplayer chit-passing game that runs in a web browser and can be packaged as an Android APK.
+**Cat Cat Bat Bat** is a mobile-first multiplayer chit-passing game playable in a modern web browser. Android users can use the APK; Windows, iPhone/iPad, and other desktop/mobile users can use the browser edition.
+
+## Play the game
+
+### Windows, macOS, Linux, iPhone/iPad, and other devices
+
+**Use the browser edition:** [Open the game source — `index.html`](index.html).
+
+The game needs to be served over **HTTPS or localhost** because it uses JavaScript modules and the Web Crypto API. Downloading the HTML and opening it directly as a `file://` page may not work. To run it from your own computer:
+
+1. Download or clone this repository.
+2. Install Python 3 if needed.
+3. Open a terminal in the downloaded repository folder.
+4. Start a local web server:
+   ```bash
+   python -m http.server 8000
+   ```
+   On Windows, `py -m http.server 8000` also works.
+5. Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+For playing with friends on different devices, the game must be served from a publicly reachable HTTPS website. Once GitHub Pages or another HTTPS host is enabled, share that website URL with your friends. **The source file link above is not itself a hosted playable game.**
+
+### Android
+
+Android users can install the APK from the [GitHub Releases page](https://github.com/binyameen212/cat-cat-bat-bat/releases) once a release is published. The APK is intentionally not stored in the repository root.
 
 ## Features
 
@@ -12,6 +36,15 @@ A mobile-first multiplayer chit-passing game that runs in a web browser and can 
 - Friends list with friend IDs, requests, direct messages, and room invitations.
 - Direct messages use the Web Crypto API with ECDH key agreement and AES-GCM encryption.
 - Peer-to-peer connections use WebRTC through Trystero; public Nostr relays are used for peer discovery.
+
+## Supported platforms
+
+- **Windows:** use a current Chrome, Edge, or Firefox browser.
+- **iOS / iPadOS:** use a current Safari browser. For local development, the game must be served over HTTPS or localhost.
+- **Android:** use a modern browser or the APK release.
+- **macOS / Linux:** use a current browser.
+
+Browser/device compatibility and multiplayer connectivity have not been tested across every platform. Some networks may block direct peer-to-peer connections.
 
 ## Tech stack
 
@@ -28,51 +61,27 @@ Add real screenshots in `docs/` and use these filenames:
 
 | File | Capture |
 | --- | --- |
-| `docs/screenshot1.png` | Opening menu with the create/join room controls |
+| `docs/screenshot1.png` | Opening menu with create/join controls |
 | `docs/screenshot2.png` | Room lobby showing the room code and players |
-| `docs/screenshot3.png` | Active game showing the table and a player's chits |
+| `docs/screenshot3.png` | Active gameplay showing the table and a player's chits |
 | `docs/screenshot4.png` | Friends screen or final results screen |
 
-See [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) for the checklist. The screenshots are placeholders until you add the image files.
-
-## Run locally
-
-### Run the browser game
-
-The game uses JavaScript modules, Web Crypto, and a CDN import. Run it from `localhost` or HTTPS rather than opening the HTML as a `file://` URL.
-
-1. Install Python 3 if it is not already installed.
-2. Clone or download this repository.
-3. Open a terminal in the repository folder.
-4. Start a local static web server:
-
-   ```bash
-   python -m http.server 8000
-   ```
-
-   On some Windows installations, use `py -m http.server 8000`.
-5. Open [http://localhost:8000/src/](http://localhost:8000/src/) in your browser and select `index.html` if the directory listing appears, or go directly to [http://localhost:8000/src/index.html](http://localhost:8000/src/index.html).
-6. Allow the page to load its Trystero dependency from the internet.
-
-For multiplayer testing, open the game in separate browser profiles/devices and create or join the same room code. Peer connectivity depends on browser/network conditions; the current source sets `TURN = []`, so no TURN relay is configured.
-
-### Android APK
-
-The repository no longer stores APK binaries in its root. Download a packaged APK from the [GitHub Releases page](https://github.com/binyameen212/cat-cat-bat-bat/releases) once a release has been published.
+See [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) for the checklist. The screenshot images have not been added yet.
 
 ## How it works
 
 The room creator's browser creates an `Engine` instance and owns the authoritative game state. Other players send actions, such as joining or passing a chit, to the host. The host applies the rules and sends each player a tailored state view. Trystero sets up peer-to-peer connections using WebRTC; public Nostr relays are used for discovery rather than as a dedicated game server.
 
-The Friends feature is a separate browser-side module in the same HTML file. It stores a local identity, contacts, and chats in `localStorage`; friend identities use ECDH P-256 public keys, and direct messages are encrypted with AES-GCM. Friend messaging requires peers to be reachable at the same time for delivery; queued messages remain in local storage until they can be sent.
+The Friends feature stores a local identity, contacts, and chats in `localStorage`. Friend identities use ECDH P-256 public keys, and direct messages are encrypted with AES-GCM. Friend messaging requires peers to be reachable for delivery; queued messages remain in local storage until they can be sent.
 
 ## Known limitations
 
 - No TURN server is configured by default. Some NATs, firewalls, or restricted networks may prevent peer-to-peer connections.
-- The app depends on internet access for the Trystero CDN import, peer discovery, and the external font.
-- Browser storage is local to the device/browser. Clearing site data can remove saved friends, identity, and chats.
+- The game depends on internet access for the Trystero CDN import, peer discovery, and the external font.
+- Browser storage is local to each device/browser. Clearing site data can remove saved friends, identity, and chats.
+- Directly opening the downloaded HTML as a `file://` URL may fail; use localhost or an HTTPS website.
+- A public hosted browser URL is not configured by this repository update. Enable GitHub Pages or deploy the HTML to an HTTPS static host before sharing a playable link.
 - The source does not include an automated test suite or a reproducible Android packaging/build setup.
-- The repository's APK release workflow and Android-device compatibility have not been independently verified here.
 - Screenshots still need to be captured from the running game.
 
 ## License
