@@ -1,11 +1,12 @@
 # Screenshot checklist
 
-Save actual, unedited screenshots from the running game in this directory using these names:
+Capture genuine screenshots from the running game and save them in this directory:
 
-1. `screenshot1.png` — opening screen or main menu.
-2. `screenshot2.png` — normal gameplay, with the main game interface visible.
-3. `screenshot3.png` — result, win, loss, or game-over screen (whichever the game actually has).
+1. `screenshot1.png` — opening menu, showing the create/join controls.
+2. `screenshot2.png` — lobby, showing the room code and player list (use test names only).
+3. `screenshot3.png` — active gameplay, showing the table and your chits.
+4. `screenshot4.png` — Friends screen or end-of-round results.
 
-Use the same device orientation and readable resolution where practical. Do not fabricate screenshots or include personal notifications, account information, or other private data.
+Use a readable resolution and consistent orientation where practical. Do not include personal notifications, account details, or other private information. Do not fabricate screenshots.
 
-These files are not included yet. Update the README links if you choose different filenames.
+These image files have not been added yet. Keep the filenames in the README synchronized with the files you add.
