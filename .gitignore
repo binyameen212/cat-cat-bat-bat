@@ -1,0 +1,39 @@
+# Android / Gradle
+.gradle/
+build/
+**/build/
+local.properties
+*.iml
+*.hprof
+captures/
+.externalNativeBuild/
+.cxx/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Java / Kotlin
+out/
+target/
+
+# Node / frontend tooling
+node_modules/
+dist/
+coverage/
+.npm/
+.pnpm-store/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.pfx
+secrets/
