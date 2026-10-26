@@ -1,58 +1,80 @@
 # Cat Cat Bat Bat
 
-An Android game project by Yameen.
-
-> **Repository status:** This repository is being prepared as a developer portfolio. The current tracked artifact is a built APK, not the game's editable source code. Source-level features, implementation details, and build instructions cannot be verified from the APK listing alone.
+A mobile-first multiplayer chit-passing game that runs in a web browser and can be packaged as an Android APK.
 
 ## Features
 
-The game is distributed as an Android APK. Add a concise, verified list of gameplay features here after reviewing the game and its source code. Do not list features that have not been tested.
+- Create or join a five-letter room for **3–8 players**.
+- Pass chits to the next player and be the first to collect a matching set.
+- The winning set is five of a kind for 3–4 players, or four of a kind for 5–8 players.
+- Host-authoritative game engine: the room creator's browser runs the game rules and sends each player their view.
+- In-game room chat.
+- Friends list with friend IDs, requests, direct messages, and room invitations.
+- Direct messages use the Web Crypto API with ECDH key agreement and AES-GCM encryption.
+- Peer-to-peer connections use WebRTC through Trystero; public Nostr relays are used for peer discovery.
 
 ## Tech stack
 
-- **Platform:** Android
-- **Deliverable:** Android APK
-- **Implementation language and framework:** Not verified from the currently available repository files.
+- HTML5, CSS, and JavaScript modules
+- [Trystero 0.25.4](https://github.com/dmotz/trystero) for peer-to-peer room connections
+- WebRTC for browser-to-browser data channels
+- Web Crypto API for friend-message encryption and identity keys
+- `localStorage` for local friend, identity, and chat data
+- Google Fonts (Great Vibes) for the handwritten-style title and chits
 
 ## Screenshots
 
-Add screenshots to `docs/` and replace these placeholders with the actual images:
+Add real screenshots in `docs/` and use these filenames:
 
-| Screenshot | What to capture |
+| File | Capture |
 | --- | --- |
-| [Main menu](docs/screenshot1.png) | The first screen shown when the game opens |
-| [Gameplay](docs/screenshot2.png) | A representative moment of normal gameplay |
-| [Result or game-over screen](docs/screenshot3.png) | The end-of-round/result screen, if the game has one |
+| `docs/screenshot1.png` | Opening menu with the create/join room controls |
+| `docs/screenshot2.png` | Room lobby showing the room code and players |
+| `docs/screenshot3.png` | Active game showing the table and a player's chits |
+| `docs/screenshot4.png` | Friends screen or final results screen |
 
-Capture screenshots directly from the running game on an Android device or emulator. Avoid including personal notifications, account details, or other private information.
+See [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) for the checklist. The screenshots are placeholders until you add the image files.
 
-## Run the game locally
+## Run locally
 
-### Install and run on Android
+### Run the browser game
 
-1. Open the repository's [Releases page](https://github.com/binyameen212/cat-cat-bat-bat/releases).
-2. Download the APK attached to the relevant release.
-3. Transfer it to your Android device if you downloaded it on a computer.
-4. Open the APK and follow Android's installation prompts. If prompted, allow installation from that source in Settings.
-5. Launch **Cat Cat Bat Bat** from your app list.
+The game uses JavaScript modules, Web Crypto, and a CDN import. Run it from `localhost` or HTTPS rather than opening the HTML as a `file://` URL.
 
-Only install APKs you trust. Android settings and prompts vary by device and OS version.
+1. Install Python 3 if it is not already installed.
+2. Clone or download this repository.
+3. Open a terminal in the repository folder.
+4. Start a local static web server:
 
-### Build from source
+   ```bash
+   python -m http.server 8000
+   ```
 
-A reproducible source build is **not currently documented** because the repository does not yet contain the verified project source and build configuration. Add the original project files and their actual build instructions before claiming that contributors can build the game locally.
+   On some Windows installations, use `py -m http.server 8000`.
+5. Open [http://localhost:8000/src/](http://localhost:8000/src/) in your browser and select `index.html` if the directory listing appears, or go directly to [http://localhost:8000/src/index.html](http://localhost:8000/src/index.html).
+6. Allow the page to load its Trystero dependency from the internet.
+
+For multiplayer testing, open the game in separate browser profiles/devices and create or join the same room code. Peer connectivity depends on browser/network conditions; the current source sets `TURN = []`, so no TURN relay is configured.
+
+### Android APK
+
+The repository no longer stores APK binaries in its root. Download a packaged APK from the [GitHub Releases page](https://github.com/binyameen212/cat-cat-bat-bat/releases) once a release has been published.
 
 ## How it works
 
-The APK is the packaged Android application that the device installs and launches. The original source code and internal game logic have not been reviewed as part of this repository cleanup, so this README does not speculate about how gameplay, input, rendering, or state management are implemented. Document those details after inspecting the original project.
+The room creator's browser creates an `Engine` instance and owns the authoritative game state. Other players send actions, such as joining or passing a chit, to the host. The host applies the rules and sends each player a tailored state view. Trystero sets up peer-to-peer connections using WebRTC; public Nostr relays are used for discovery rather than as a dedicated game server.
+
+The Friends feature is a separate browser-side module in the same HTML file. It stores a local identity, contacts, and chats in `localStorage`; friend identities use ECDH P-256 public keys, and direct messages are encrypted with AES-GCM. Friend messaging requires peers to be reachable at the same time for delivery; queued messages remain in local storage until they can be sent.
 
 ## Known limitations
 
-- The editable source code and build configuration are not currently documented in this repository.
-- The implementation language, framework, Android minimum version, and device compatibility have not been independently verified.
-- The screenshot paths above are placeholders until the images are added.
-- No automated tests or clean-build verification have been run as part of this documentation update.
+- No TURN server is configured by default. Some NATs, firewalls, or restricted networks may prevent peer-to-peer connections.
+- The app depends on internet access for the Trystero CDN import, peer discovery, and the external font.
+- Browser storage is local to the device/browser. Clearing site data can remove saved friends, identity, and chats.
+- The source does not include an automated test suite or a reproducible Android packaging/build setup.
+- The repository's APK release workflow and Android-device compatibility have not been independently verified here.
+- Screenshots still need to be captured from the running game.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). The license applies to the material you own and distribute in this repository. Ensure you have the rights to license any third-party code, artwork, audio, fonts, libraries, or other bundled material before publishing it under MIT.
+Licensed under the [MIT License](LICENSE), copyright © 2026 Yameen. Confirm that you have permission to distribute any third-party libraries and assets included with the project.
